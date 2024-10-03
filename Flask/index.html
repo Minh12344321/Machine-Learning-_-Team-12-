@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự đoán giá nhà</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dự đoán giá bất động sản</h1>
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="transaction_date"> Ngày giao dịch:</label>
+                <input type="date" id="transaction_date" name="transaction_date" placeholder="Ví dụ: 12/12/2018" required>
+            </div>
+
+            <div class="form-group">
+                <label for="house_age"> Tuổi nhà:</label>
+                <input type="number" id="house_age" name="house_age" placeholder="Ví dụ: 32" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mrt_distance"> Khoảng cách đến trạm MRT gần nhất (m):</label>
+                <input type="number" id="mrt_distance" name="mrt_distance" placeholder="Ví dụ: 84.87882" required>
+            </div>
+
+            <div class="form-group">
+                <label for="stores"> Số cửa hàng tiện lợi:</label>
+                <input type="number" id="stores" name="stores" placeholder="Ví dụ: 10" required>
+            </div>
+
+            <div class="form-group">
+                <label for="latitude"> Vĩ độ:</label>
+                <input type="number" step="0.000001" id="latitude" name="latitude" placeholder="Ví dụ: 24.98298" required>
+            </div>
+
+            <div class="form-group">
+                <label for="longitude"> Kinh độ:</label>
+                <input type="number" step="0.000001" id="longitude" name="longitude" placeholder="Ví dụ: 121.54024" required>
+            </div>
+
+            <div class="form-group">
+                <label for="unit_price"> Giá nhà trên 1 đơn vị diện tích ($/m²):</label>
+                <input type="number" id="unit_price" name="unit_price" placeholder="Ví dụ: 4000000" required>
+            </div>
+
+            <div class="form-group">
+                <label for="model">Chọn mô hình dự đoán:</label>
+                <select id="model" name="model" required>
+                    <option value="linear">Linear Regression</option>
+                    <option value="lasso">Lasso Regression</option>
+                    <option value="neural">Neural Network</option>
+                    <option value="stacking">Stacking Model</option>
+                </select>
+            </div>
+
+            <button type="submit">Dự đoán giá nhà</button>
+        </form>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
