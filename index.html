@@ -60,7 +60,50 @@
 
         <div id="result" class="result"></div>
     </div>
+    <script>
+        function submitForm() {
+          const date = document.getElementById('transaction_date').value;
+          const age= document.getElementById('house_age').value;
+          const mrt= document.getElementById('mrt_distance').value;
+          const store = document.getElementById('stores').value;
+          const latitude = document.getElementById('latitude').value;
+          const longitude = document.getElementById('longitude').value;
+          const price= document.getElementById('unit_price').value;
+          const model= document.getElementById('model').value;
+  
+          // Send data to backend using fetch
+          fetch('/prediction', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              date:date,
+              age : age,
+              mrt : mrt,
+              store :store,
+              latitude : latitude,
+              longitude : longitude,
+              price : price,
+              model : model
 
-    <script src="script.js"></script>
+            }),
+          })
+            .then(response => response.json())
+            .then(data => {
+              // Display the prediction result
+              document.getElementById('result').innerHTML = `
+                <p>BMI của bạn là: ${data.bmi}</p>
+                <p>Kết quả dự đoán: ${data.prediction}</p>
+              `;
+            })
+            .catch(error => console.error('Error:', error));
+  
+          // Prevent form from submitting the traditional way
+          return false;
+        }
+      </script>
+    </body>
+  </html>
 </body>
 </html>
