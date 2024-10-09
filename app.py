@@ -38,7 +38,8 @@ def home():
 def predict():
     if request.method == 'POST':
         # Get form data
-        date = request.form['date']
+        date_str = request.form['date']
+        date_numeric = float(date_str)
         age = float(request.form['age'])
         distance = float(request.form['distance'])
         store = float(request.form['store'])
@@ -46,10 +47,10 @@ def predict():
         longitude = float(request.form['longitude'])
 
         # In ra các giá trị đầu vào
-        print(f"Date: {date}, Age: {age}, Distance: {distance}, Store: {store}, Latitude: {latitude}, Longitude: {longitude}")
+       print(f"Date: {date_numeric}, Age: {age}, Distance: {distance}, Store: {store}, Latitude: {latitude}, Longitude: {longitude}")
 
         # Create feature array for prediction
-        features = np.array([[date, age, distance, store, latitude, longitude]])
+        features = np.array([[date_numeric, age, distance, store, latitude, longitude]])
 
         # Predict using the loaded model
         print("Starting prediction...")
