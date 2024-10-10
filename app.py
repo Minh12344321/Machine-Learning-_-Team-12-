@@ -37,9 +37,8 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
-        # Get form data
-        date_str = request.form['date']
-        date_numeric = float(date_str)
+      try:
+     
         age = float(request.form['age'])
         distance = float(request.form['distance'])
         store = float(request.form['store'])
@@ -47,26 +46,29 @@ def predict():
         longitude = float(request.form['longitude'])
 
         # In ra các giá trị đầu vào
-       print(f"Date: {date_numeric}, Age: {age}, Distance: {distance}, Store: {store}, Latitude: {latitude}, Longitude: {longitude}")
+       print(f"Age: {age}, Distance: {distance}, Store: {store}, Latitude: {latitude}, Longitude: {longitude}")
 
         # Create feature array for prediction
-        features = np.array([[date_numeric, age, distance, store, latitude, longitude]])
+        features = np.array([[age, distance, store, latitude, longitude]])
 
         # Predict using the loaded model
-        print("Starting prediction...")
-        prediction = model.predict(features)
-        prediction2 = model2.predict(features)
-        prediction3 = model3.predict(features)
-        prediction4 = model4.predict(features)
+          scaled_features = scaler.transform(features)
 
-        # In ra các giá trị dự đoán
-        print(f"Prediction 1: {prediction[0]}")
-        print(f"Prediction 2: {prediction2[0]}")
-        print(f"Prediction 3: {prediction3[0]}")
-        print(f"Prediction 4: {prediction4[0]}")
+            # Dự đoán bằng các mô hình
+        prediction_linear = model.predict(scaled_features)[0]
+        prediction_lasso = model2.predict(scaled_features)[0]
+        prediction_mlp = model3.predict(scaled_features)[0]
+        prediction_stacking = model4.predict(scaled_features)[0]
 
-        # Return the prediction result
-        return render_template('index.html', prediction=prediction[0], prediction2=prediction2[0], prediction3=prediction3[0], prediction4=prediction4[0])
+        # Trả về kết quả dự đoán trên giao diện web
+        return render_template('index.html',
+                               prediction_linear=prediction_linear,
+                               prediction_lasso=prediction_lasso,
+                               prediction_mlp=prediction_mlp,
+                               prediction_stacking=prediction_stacking)
+
+        except Exception as e:
+            return f"Đã xảy ra lỗi: {e}"
 
 if __name__ == '__main__':
     app.run(debug=True)
