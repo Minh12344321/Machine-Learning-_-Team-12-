@@ -3,32 +3,34 @@ import joblib
 import numpy as np
 import pandas as pd
 import os
+import warnings
+from sklearn.preprocessing import StandardScaler
+
+warnings.filterwarnings("ignore", category=UserWarning)
 
 app = Flask(__name__)
 
-file_path1 = 'models/linear.pkl'
-file_path2 = 'models/lasso.pkl'
-file_path3 = 'models/mlp.pkl'
-file_path4 = 'models/stacking.pkl'
+# Tải mô hình
+model_dir = 'models'
+linear_model_path = os.path.join(model_dir, 'linear_model.pkl')
+lasso_model_path = os.path.join(model_dir, 'lasso_model.pkl')
+mlp_model_path = os.path.join(model_dir, 'nn_model.pkl')
+stacking_model_path = os.path.join(model_dir, 'stacking_model.pkl')
+scaler_path = os.path.join(model_dir, 'scaler.pkl')
 
-# Kiểm tra xem các file mô hình có tồn tại không
-for file_path in [file_path1, file_path2, file_path3, file_path4]:
-    if not os.path.exists(file_path):
-        print(f"File '{file_path}' does not exist!")
+# Kiểm tra sự tồn tại của các tệp mô hình và scaler
+for model_path in [linear_model_path, lasso_model_path, mlp_model_path, stacking_model_path, scaler_path]:
+    if not os.path.exists(model_path):
+        print(f"File not found: {model_path}")
 
-model = joblib.load(file_path1)
-model2 = joblib.load(file_path2)
-model3 = joblib.load(file_path3)
-model4 = joblib.load(file_path4)
+# Tải các mô hình và scaler
+linear_model = joblib.load(linear_model_path)
+lasso_model = joblib.load(lasso_model_path)
+mlp_model = joblib.load(mlp_model_path)
+stacking_model = joblib.load(stacking_model_path)
+scaler = joblib.load(scaler_path)
 
-# Kiểm tra loại của từng mô hình
-print(f"Model type (Linear): {type(model)}")
-print(f"Model type (Lasso): {type(model2)}")
-print(f"Model type (MLP): {type(model3)}")
-print(f"Model type (Stacking): {type(model4)}")
-
-# Load the real_estate data (if needed)
-real_estate_data = pd.read_csv('Real estate price.csv')
+print("Models and scaler loaded successfully.")
 
 @app.route('/')
 def home():
@@ -37,38 +39,35 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
-      try:
-     
-        age = float(request.form['age'])
-        distance = float(request.form['distance'])
-        store = float(request.form['store'])
-        latitude = float(request.form['latitude'])
-        longitude = float(request.form['longitude'])
+   
+            # Nhận đầu vào từ người dùng
+            age = float(request.form['house_age'])
+            distance = float(request.form['mrt_distance'])
+            store = float(request.form['stores'])
+            latitude = float(request.form['latitude'])
+            longitude = float(request.form['longitude'])
+            model_choice = request.form['model']
+            
+            # In các giá trị đầu vào để kiểm tra
+            print("Input Values - Age:", age, "Distance:", distance, "Store:", store, "Latitude:", latitude, "Longitude:", longitude)
 
-        # In ra các giá trị đầu vào
-       print(f"Age: {age}, Distance: {distance}, Store: {store}, Latitude: {latitude}, Longitude: {longitude}")
+            # Tạo mảng đầu vào và chuẩn hóa
+            features = np.array([[age, distance, store, latitude, longitude]])
+            scaled_features = scaler.transform(features)
 
-        # Create feature array for prediction
-        features = np.array([[age, distance, store, latitude, longitude]])
+            if model_choice == 'linear':
+                    prediction = linear_model.predict(scaled_features)[0]
+            elif model_choice == 'lasso':
+                prediction = lasso_model.predict(scaled_features)[0]
+            elif model_choice == 'nn':
+                prediction = mlp_model.predict(scaled_features)[0]
+            elif model_choice == 'stacking':
+                prediction = stacking_model.predict(scaled_features)[0]
 
-        # Predict using the loaded model
-          scaled_features = scaler.transform(features)
+        # Chuyển đổi kết quả thành chuỗi nếu cần
+            prediction = f"Giá dự đoán là: {prediction:.2f}"
 
-            # Dự đoán bằng các mô hình
-        prediction_linear = model.predict(scaled_features)[0]
-        prediction_lasso = model2.predict(scaled_features)[0]
-        prediction_mlp = model3.predict(scaled_features)[0]
-        prediction_stacking = model4.predict(scaled_features)[0]
-
-        # Trả về kết quả dự đoán trên giao diện web
-        return render_template('index.html',
-                               prediction_linear=prediction_linear,
-                               prediction_lasso=prediction_lasso,
-                               prediction_mlp=prediction_mlp,
-                               prediction_stacking=prediction_stacking)
-
-        except Exception as e:
-            return f"Đã xảy ra lỗi: {e}"
-
+            return render_template('index.html', prediction=prediction)
+       
 if __name__ == '__main__':
     app.run(debug=True)
