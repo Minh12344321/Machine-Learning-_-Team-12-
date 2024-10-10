@@ -21,7 +21,7 @@ print(real_estate_data)
 # Bỏ cột "Date/Time"
 real_estate_data_cleaned = real_estate_data.drop(columns=['No'])
 
-X = real_estate_data_cleaned.drop(columns=['Y house price of unit area'])
+X = real_estate_data_cleaned.drop(columns=['Y house price of unit area','X1 transaction date'])
 y = real_estate_data_cleaned['Y house price of unit area']
 
 # Chia tập dữ liệu thành tập huấn luyện và tập kiểm tra (80% huấn luyện, 20% kiểm tra)
