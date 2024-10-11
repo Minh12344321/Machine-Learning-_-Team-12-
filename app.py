@@ -67,12 +67,11 @@ def predict():
             
         # Chuyển đổi kết quả thành chuỗi nếu cần
             prediction = f"Giá bất động sản dự đoán / m2 là: {prediction:.2f}"
-            qr_code_url = 'http://127.0.0.1:5000/'  # Địa chỉ URL của ứng dụng
-            qr_code_img = qrcode.make(qr_code_url)
-            qr_code_img_path = os.path.join('static', 'qr_code.png')
-            qr_code_img.save(qr_code_img_path)
+           
 
-            return render_template('index.html', prediction=prediction, qr_code_img_path=qr_code_img_path)
+            return render_template('index.html', prediction=prediction)
+        
+
         
 if __name__ == '__main__':
     app.run(debug=True)

@@ -122,15 +122,13 @@
             <input type="submit" value="Dự đoán">
         </form>
             
-        {% if qr_code_img_path %}
-            <h2>Mã QR để truy cập ứng dụng:</h2>
-            <img src="{{ qr_code_img_path }}" alt="Mã QR">
-        {% endif %}
+       
 
         {% if prediction is not none %}
         <h2>Kết quả dự đoán là :</h2>
         <p>{{ prediction }}</p>
-        {% endif %}
+        {% endif %} 
+     
     </div>
 </body>
 </html>
