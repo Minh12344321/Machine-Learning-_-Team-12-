@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import os
 import warnings
+import qrcode
 from sklearn.preprocessing import StandardScaler
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -56,18 +57,22 @@ def predict():
             scaled_features = scaler.transform(features)
 
             if model_choice == 'linear':
-                    prediction = linear_model.predict(scaled_features)[0]
+                prediction = linear_model.predict(scaled_features)[0]
             elif model_choice == 'lasso':
                 prediction = lasso_model.predict(scaled_features)[0]
             elif model_choice == 'nn':
                 prediction = mlp_model.predict(scaled_features)[0]
             elif model_choice == 'stacking':
                 prediction = stacking_model.predict(scaled_features)[0]
-
+            
         # Chuyển đổi kết quả thành chuỗi nếu cần
-            prediction = f"Giá dự đoán là: {prediction:.2f}"
+            prediction = f"Giá bất động sản dự đoán / m2 là: {prediction:.2f}"
+            qr_code_url = 'http://127.0.0.1:5000/'  # Địa chỉ URL của ứng dụng
+            qr_code_img = qrcode.make(qr_code_url)
+            qr_code_img_path = os.path.join('static', 'qr_code.png')
+            qr_code_img.save(qr_code_img_path)
 
-            return render_template('index.html', prediction=prediction)
-       
+            return render_template('index.html', prediction=prediction, qr_code_img_path=qr_code_img_path)
+        
 if __name__ == '__main__':
     app.run(debug=True)
