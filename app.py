@@ -1,11 +1,8 @@
 from flask import Flask, render_template, request
 import joblib
 import numpy as np
-import pandas as pd
 import os
 import warnings
-import qrcode
-from sklearn.preprocessing import StandardScaler
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -40,33 +37,31 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
-   
-            # Nhận đầu vào từ người dùng
-            age = float(request.form['house_age'])
-            distance = float(request.form['mrt_distance'])
-            store = float(request.form['stores'])
-            latitude = float(request.form['latitude'])
-            model_choice = request.form['model']
-            
-            # In các giá trị đầu vào để kiểm tra
-            print("Input Values - Age:", age, "Distance:", distance, "Store:", store, "Latitude:", latitude)
-
-            # Tạo mảng đầu vào và chuẩn hóa
-            features = np.array([[age, distance, store, latitude]])
-            scaled_features = scaler.transform(features)
-
-            if model_choice == 'linear':
-                prediction = linear_model.predict(scaled_features)[0]
-            elif model_choice == 'lasso':
-                prediction = lasso_model.predict(scaled_features)[0]
-            elif model_choice == 'nn':
-                prediction = mlp_model.predict(scaled_features)[0]
-            elif model_choice == 'stacking':
-                prediction = stacking_model.predict(scaled_features)[0]
-            
-     
-            prediction = f"Giá bất động sản dự đoán / m2 là: {prediction:.2f}"
-            return render_template('index.html', prediction=prediction)
+        age = float(request.form['house_age'])
+        distance = float(request.form['mrt_distance'])
+        store = float(request.form['stores'])
+        latitude = float(request.form['latitude'])
+        model_choice = request.form['model']
         
+        # In các giá trị đầu vào để kiểm tra
+        print("Input Values - Age:", age, "Distance:", distance, "Store:", store, "Latitude:", latitude)
+
+        # Tạo mảng đầu vào và chuẩn hóa
+        features = np.array([[age, distance, store, latitude]])
+        scaled_features = scaler.transform(features)
+
+        if model_choice == 'linear':
+            prediction = linear_model.predict(scaled_features)[0]
+        elif model_choice == 'lasso':
+            prediction = lasso_model.predict(scaled_features)[0]
+        elif model_choice == 'nn':
+            prediction = mlp_model.predict(scaled_features)[0]
+        elif model_choice == 'stacking':
+            prediction = stacking_model.predict(scaled_features)[0]
+        
+        prediction = f"Giá bất động sản dự đoán / m2 là: {prediction:.2f}"
+        return render_template('index.html', prediction=prediction)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
