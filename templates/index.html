@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +39,7 @@
             margin-bottom: 5px;
         }
 
-        input[type="number"], input[type="radio"] {
+        input[type="number"], select {
             width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
@@ -69,10 +68,6 @@
         p {
             margin: 5px 0;
         }
-
-        .radio-group {
-            text-align: left;
-        }
     </style>
 </head>
 <body>
@@ -99,31 +94,20 @@
                 <input type="number" step="0.000001" id="latitude" name="latitude" placeholder="Ví dụ: 24.98298" required>
             </div>
 
-
-
-            <div class="form-group radio-group">
+            <div class="form-group">
                 <label for="model">Chọn mô hình:</label>
-                <label>
-                    <input type="radio" name="model" value="linear" required> Linear Regression
-                </label>
-                <label>
-                    <input type="radio" name="model" value="lasso"> Lasso Regression
-                </label>
-                <label>
-                    <input type="radio" name="model" value="nn"> Neural Network
-                </label>
-                <label>
-                    <input type="radio" name="model" value="stacking"> Stacking Model
-                </label>
+                <select id="model" name="model" required>
+                    <option value="linear">Linear Regression</option>
+                    <option value="lasso">Lasso Regression</option>
+                    <option value="nn">Neural Network</option>
+                    <option value="stacking">Stacking Model</option>
+                </select>
             </div>
 
             <input type="submit" value="Dự đoán">
         </form>
-            
-      
 
         {% if prediction is not none %}
-
         <p>{{ prediction }}</p>
         {% endif %}
     </div>
