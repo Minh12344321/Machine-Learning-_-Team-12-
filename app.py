@@ -46,14 +46,13 @@ def predict():
             distance = float(request.form['mrt_distance'])
             store = float(request.form['stores'])
             latitude = float(request.form['latitude'])
-            longitude = float(request.form['longitude'])
             model_choice = request.form['model']
             
             # In các giá trị đầu vào để kiểm tra
-            print("Input Values - Age:", age, "Distance:", distance, "Store:", store, "Latitude:", latitude, "Longitude:", longitude)
+            print("Input Values - Age:", age, "Distance:", distance, "Store:", store, "Latitude:", latitude)
 
             # Tạo mảng đầu vào và chuẩn hóa
-            features = np.array([[age, distance, store, latitude, longitude]])
+            features = np.array([[age, distance, store, latitude]])
             scaled_features = scaler.transform(features)
 
             if model_choice == 'linear':
@@ -65,13 +64,9 @@ def predict():
             elif model_choice == 'stacking':
                 prediction = stacking_model.predict(scaled_features)[0]
             
-        # Chuyển đổi kết quả thành chuỗi nếu cần
+     
             prediction = f"Giá bất động sản dự đoán / m2 là: {prediction:.2f}"
-           
-
             return render_template('index.html', prediction=prediction)
-        
-
         
 if __name__ == '__main__':
     app.run(debug=True)

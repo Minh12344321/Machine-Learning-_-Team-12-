@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,10 +99,7 @@
                 <input type="number" step="0.000001" id="latitude" name="latitude" placeholder="Ví dụ: 24.98298" required>
             </div>
 
-            <div class="form-group">
-                <label for="longitude">Kinh độ:</label>
-                <input type="number" step="0.000001" id="longitude" name="longitude" placeholder="Ví dụ: 121.54024" required>
-            </div>
+
 
             <div class="form-group radio-group">
                 <label for="model">Chọn mô hình:</label>
@@ -122,13 +120,12 @@
             <input type="submit" value="Dự đoán">
         </form>
             
-       
+      
 
         {% if prediction is not none %}
-        <h2>Kết quả dự đoán là :</h2>
+
         <p>{{ prediction }}</p>
-        {% endif %} 
-     
+        {% endif %}
     </div>
 </body>
 </html>
