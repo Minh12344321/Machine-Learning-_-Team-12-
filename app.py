@@ -37,10 +37,10 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     if request.method == 'POST':
-        age = float(request.form['house_age'])
-        distance = float(request.form['mrt_distance'])
-        store = float(request.form['stores'])
-        latitude = float(request.form['latitude'])
+        age = float(request.form['house_age'] or 0 )
+        distance = float(request.form['mrt_distance'] or 0)
+        store = float(request.form['stores'] or 0)
+        latitude = float(request.form['latitude'] or 0)
         model_choice = request.form['model']
         
         # In các giá trị đầu vào để kiểm tra
@@ -58,10 +58,13 @@ def predict():
             prediction = mlp_model.predict(scaled_features)[0]
         elif model_choice == 'stacking':
             prediction = stacking_model.predict(scaled_features)[0]
-        
-        prediction = f"Giá bất động sản dự đoán / m2 là: {prediction:.2f}"
-        return render_template('index.html', prediction=prediction)
+            
+        if prediction < 0:
+                prediction = "Không thể dự đoán được giá bất động sản "
+        else:
+            prediction = f"Giá bất động sản dự đoán / m2 là: {prediction:.2f}"
 
+        return render_template('index.html', prediction=prediction)
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5002))
     app.run(host='0.0.0.0', port=port)

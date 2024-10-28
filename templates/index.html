@@ -76,22 +76,22 @@
         <form id="predictionForm" action="/predict" method="POST">
             <div class="form-group">
                 <label for="house_age">Tuổi nhà:</label>
-                <input type="number" id="house_age" name="house_age" placeholder="Ví dụ: 32" required>
+                <input type="number" id="house_age" name="house_age" placeholder="Ví dụ: 32" step = "0.01" value="0">
             </div>
 
             <div class="form-group">
                 <label for="mrt_distance">Khoảng cách đến trạm MRT gần nhất (m):</label>
-                <input type="number" id="mrt_distance" name="mrt_distance" placeholder="Ví dụ: 84.87882" required>
+                <input type="number" id="mrt_distance" name="mrt_distance" placeholder="Ví dụ: 84.87882" step = "0.0000001" value="0">
             </div>
 
             <div class="form-group">
                 <label for="stores">Số cửa hàng tiện lợi:</label>
-                <input type="number" id="stores" name="stores" placeholder="Ví dụ: 10" required>
+                <input type="number" id="stores" name="stores" placeholder="Ví dụ: 10" step = "0.01" value="0">
             </div>
 
             <div class="form-group">
                 <label for="latitude">Vĩ độ:</label>
-                <input type="number" step="0.000001" id="latitude" name="latitude" placeholder="Ví dụ: 24.98298" required>
+                <input type="number" step="0.000001" id="latitude" name="latitude" placeholder="Ví dụ: 24.98298" step = "0.0000001" value="0">
             </div>
 
             <div class="form-group">
